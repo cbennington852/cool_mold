@@ -6,10 +6,35 @@ let blip_radius = min_radius;
 
 
 class star {
-    constructor(x_pos , y_pos , radius) {
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
-        this.radius = radius;
+    constructor(x_pos, y_pos, radius) {
+        this.x = Math.floor(x_pos);
+        this.y = Math.floor(y_pos);
+        this.radius = Math.floor(radius);
+        this.dead = false;
+    }
+
+    update() {
+        const random_num = random(0, 100);
+        if (random_num < 5) {
+            this.radius -= 1;
+        }
+
+        if (this.radius <= 5) {
+            this.dead = true;
+        }
+    }
+
+    display() {
+        const c_1 = 'hsl(0, 100%, 50%)';
+        const c_2 = '#000000'
+        let gradient = drawingContext.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        gradient.addColorStop(0, c_1); // Center color
+        gradient.addColorStop(1, c_2); // Outer color
+        drawingContext.fillStyle = gradient;
+
+        // 4. Draw your shape
+        noStroke();
+        circle(this.x, this.y, (this.radius * 2) + random(0, 2));
     }
 }
 
@@ -161,6 +186,8 @@ let slider;
 const canvas_width = Math.floor(viewportWidth * 0.95);
 const canvas_length = Math.floor(viewportHeight * 0.95);
 
+let my_stars = [];
+
 function setup() {
 
     canvas = createCanvas(canvas_width, canvas_length);
@@ -174,7 +201,9 @@ function setup() {
 
     const centerY = canvas_length / 2;
     const centerX = canvas_width / 2;
-    const radius = Math.floor(canvas_width / 4);
+    const radius = Math.floor(canvas_width / 5);
+
+   // my_stars.push(new star(centerX, centerY, 300));
 
 
     for (let i = 0; i < moldNum; i++) {
@@ -201,12 +230,23 @@ function reset() {
 function draw() {
     background(0, 5);
     loadPixels();
-    make_gradient_circle();
+    make_gradient_circle('#021b45', '#000000');
+
+    for (let i = my_stars.length - 1; i >= 0; i--) {
+        my_stars[i].display();
+        my_stars[i].update();
+
+        if (my_stars[i].dead === true) {
+            my_stars.splice(i, 1);
+        }
+    }
+
 
     for (let i = 0; i < molds.length; i++) {
         molds[i].display();
         molds[i].update();
     }
+
 
     if (mouseIsPressed) {
         if (mouseButton === LEFT) {
@@ -227,13 +267,16 @@ function draw() {
 
 }
 
-function make_gradient_circle() {
+function make_gradient_circle(c_start, c_end) {
 
     let gradient = drawingContext.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, blip_radius);
 
     // 2. Add color stops (0 is center, 1 is outer edge)
-    gradient.addColorStop(0, '#021b45'); // Center color
-    gradient.addColorStop(1, '#000000'); // Outer color
+    // gradient.addColorStop(0, '#021b45'); // Center color
+    // gradient.addColorStop(1, '#000000'); // Outer color
+
+    gradient.addColorStop(0, c_start); // Center color
+    gradient.addColorStop(1, c_end); // Outer color
 
     // 3. Assign the gradient to the drawingContext fillStyle
     drawingContext.fillStyle = gradient;
