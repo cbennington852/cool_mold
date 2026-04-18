@@ -1,0 +1,43 @@
+<!--
+   Charles Bennington
+   CPSC 322-01
+   HW3
+   9/14/2024
+   -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cool Mold</title>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+</head>
+
+<style>
+    body {
+        background-color: black;
+        color: white;
+        /* Ensures text is readable */
+    }
+</style>
+
+<body>
+    <main style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <section>
+            <h2>
+                Mold simulation
+            </h2>
+            <p>Left Click  : Expand void.</p>
+            <p>Right Click : Add more mold spawn.</p>
+            <div id="canvas-container">
+            </div>
+        </section>
+    </main>
+
+    <script src="mold.js"></script>
+    <script src="sketch.js"></script>
+
+</body>
+
+</html>
